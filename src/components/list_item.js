@@ -53,25 +53,30 @@ class Content extends Component {
 		const display_date = weekDays[date.getDay()] + ' ' + date.getDate() + ' ' + months[date.getMonth()];
 
 		return (
-			<ListItem button>
-				<Avatar>
-					{
-						elem.reason === "MAINTENANCE" ?
-						<BuildIcon/> :
-						<BoatIcon/>
-					}
-				</Avatar>
-				<ListItemText
-					primary={<span><b>{display_date}</b> : de <b>{convert_hour(elem.start)}</b> à <b>{convert_hour(elem.end)}</b></span>}
-					secondary={<span>{reason} : Fermeture {elem.totale ? "totale" : "partielle"}.</span>}
-					className={classes.text}
-				/>
-			</ListItem>
+			<a target="_blank" href={elem.link} className={classes.link}>
+				<ListItem button>
+					<Avatar>
+						{
+							elem.reason === "MAINTENANCE" ?
+							<BuildIcon/> :
+							<BoatIcon/>
+						}
+					</Avatar>
+					<ListItemText
+						primary={<span><b>{display_date}</b> : de <b>{convert_hour(elem.start)}</b> à <b>{convert_hour(elem.end)}</b></span>}
+						secondary={<span>{reason} : Fermeture {elem.totale ? "totale" : "partielle"}.</span>}
+						className={classes.text}
+					/>
+				</ListItem>
+			</a>
 		);
 	}
 }
 
 const styles = theme => ({
+	link: {
+		textDecoration: 'none',
+	},
 	text: {
 		textAlign: 'start',
 	},

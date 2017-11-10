@@ -10,22 +10,19 @@ import ListItem from './list_item';
 class Content extends Component {
 
 	render() {
-		const { data, classes } = this.props;
-
-		let error = null
+		const { data, filtered, classes } = this.props;
 
 		switch (true) {
 			case (data === null): // chargement
 				return (
-					<Paper className={classes.paper}>
+					<Paper>
 						<LinearProgress color="accent"/>
 					</Paper>
 				);
-			break;
 				
 			case (data instanceof Array && !!data.length): // Données
 				return (
-					<Paper className={classes.paper}>
+					<Paper>
 						<List disablePadding>
 						{
 							data.map((elem, index) => (
@@ -38,32 +35,37 @@ class Content extends Component {
 						</List>
 					</Paper>
 				);
-			break;
 			
 			case (data instanceof Array && !data.length): // Pas de données
 				return (
 					<Paper className={classes.paper}>
-						Pas de levé prévue
+						Pas de levées prévue{ filtered ? " pour les critères de recherche spécifié" : "" }.
 					</Paper>
 				);
-			break;
-			
-			case (typeof data === "Object"): // erreur
-				error = data.error || null;
-			case (error !== null):
+
 			default:
+				let error = "";
+				if (data.error instanceof String)
+					error = data.error;
+				else if (data.error instanceof Error)
+					error = data.error.name + " " + data.error.message;
+				else if (data.error.error instanceof String)
+					error = data.error.error;
 				return (
 					<Paper className={classes.paper}>
-						Oups !<br/>Nous n'avons pas réussi à récupérer les données<br/>
+						Oups !<br/>Nous n'avons pas réussi à récupérer les données<br/>{ error ? "Erreur : " + error : "" }
 					</Paper>
 				);
-			break;
 		}
-		console.log("wololo");
 	}
 }
 
 const styles = theme => ({
+	paper: {
+		padding: 16,
+		textAlign: 'center',
+		color: theme.palette.text.secondary,
+	},
 });
 
 export default withStyles(styles)(Content);
